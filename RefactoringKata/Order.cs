@@ -4,17 +4,17 @@ namespace RefactoringKata
 {
     public class Order
     {
-        private readonly int id;
+        private readonly int _id;
         private readonly List<Product> _products = new List<Product>();
 
         public Order(int id)
         {
-            this.id = id;
+            _id = id;
         }
 
         public int GetOrderId()
         {
-            return id;
+            return _id;
         }
 
         public int GetProductsCount()

@@ -4,7 +4,7 @@ namespace RefactoringKata
 {
     public class OrdersWriter
     {
-        private Orders _orders;
+        private readonly Orders _orders;
 
         public OrdersWriter(Orders orders)
         {
@@ -32,13 +32,13 @@ namespace RefactoringKata
                     sb.Append(product.Code);
                     sb.Append("\", ");
                     sb.Append("\"color\": \"");
-                    sb.Append(getColorFor(product));
+                    sb.Append(product.GetColorInString());
                     sb.Append("\", ");
 
-                    if (product.Size != Product.SIZE_NOT_APPLICABLE)
+                    if (product.Size != Product.SizeNotApplicable)
                     {
                         sb.Append("\"size\": \"");
-                        sb.Append(getSizeFor(product));
+                        sb.Append(GetSizeFor(product));
                         sb.Append("\", ");
                     }
 
@@ -68,7 +68,7 @@ namespace RefactoringKata
         }
 
 
-        private string getSizeFor(Product product)
+        private string GetSizeFor(Product product)
         {
             switch (product.Size)
             {
@@ -86,21 +86,6 @@ namespace RefactoringKata
                     return "XXL";
                 default:
                     return "Invalid Size";
-            }
-        }
-
-        private string getColorFor(Product product)
-        {
-            switch (product.Color)
-            {
-                case 1:
-                    return "blue";
-                case 2:
-                    return "red";
-                case 3:
-                    return "yellow";
-                default:
-                    return "no color";
             }
         }
     }

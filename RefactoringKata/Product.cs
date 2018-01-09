@@ -1,8 +1,16 @@
-﻿namespace RefactoringKata
+﻿using System.Collections.Generic;
+
+namespace RefactoringKata
 {
     public class Product
     {
-        public static int SIZE_NOT_APPLICABLE = -1;
+        public static int SizeNotApplicable = -1;
+        public static Dictionary<int, string> ColorCodeMapping = new Dictionary<int, string>
+        {
+            {1, "blue"},
+            {2, "red"},
+            {3, "yellow"}
+        };
 
         public string Code { get; set; }
         public int Color { get; set; }
@@ -17,6 +25,11 @@
             Size = size;
             Price = price;
             Currency = currency;
+        }
+
+        public string GetColorInString()
+        {
+            return ColorCodeMapping.TryGetValue(Color, out var color) ? color : "no color";
         }
     }
 }

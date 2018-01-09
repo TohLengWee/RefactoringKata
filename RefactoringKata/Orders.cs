@@ -4,7 +4,7 @@ namespace RefactoringKata
 {
     public class Orders
     {
-        private List<Order> _orders = new List<Order>();
+        private readonly List<Order> _orders = new List<Order>();
 
         public void AddOrder(Order order)
         {
