@@ -38,7 +38,7 @@ namespace RefactoringKata
                     if (product.Size != Product.SizeNotApplicable)
                     {
                         sb.Append("\"size\": \"");
-                        sb.Append(GetSizeFor(product));
+                        sb.Append(product.GetSizeInString());
                         sb.Append("\", ");
                     }
 
@@ -65,28 +65,6 @@ namespace RefactoringKata
             }
 
             return sb.Append("]}").ToString();
-        }
-
-
-        private string GetSizeFor(Product product)
-        {
-            switch (product.Size)
-            {
-                case 1:
-                    return "XS";
-                case 2:
-                    return "S";
-                case 3:
-                    return "M";
-                case 4:
-                    return "L";
-                case 5:
-                    return "XL";
-                case 6:
-                    return "XXL";
-                default:
-                    return "Invalid Size";
-            }
         }
     }
 }

@@ -11,6 +11,15 @@ namespace RefactoringKata
             {2, "red"},
             {3, "yellow"}
         };
+        public static Dictionary<int, string> SizeCodeMapping = new Dictionary<int, string>
+        {
+            {1, "XS"},
+            {2, "S"},
+            {3, "M"},
+            {4, "L"},
+            {5, "XL"},
+            {6, "XXL"}
+        };
 
         public string Code { get; set; }
         public int Color { get; set; }
@@ -30,6 +39,11 @@ namespace RefactoringKata
         public string GetColorInString()
         {
             return ColorCodeMapping.TryGetValue(Color, out var color) ? color : "no color";
+        }
+
+        public string GetSizeInString()
+        {
+            return SizeCodeMapping.TryGetValue(Size, out var size) ? size : "Invalid Size";
         }
     }
 }
