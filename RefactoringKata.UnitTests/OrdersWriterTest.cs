@@ -1,4 +1,6 @@
-﻿using NUnit.Framework;
+﻿using System;
+using System.Collections.Generic;
+using NUnit.Framework;
 
 namespace RefactoringKata.UnitTests
 {
@@ -34,7 +36,7 @@ namespace RefactoringKata.UnitTests
         {
             _order111.AddProduct(new Product("Shirt", 1, 3, 2.99, "TWD"));
 
-            var order111Json = JsonOrder111WithProduct("{\"code\": \"Shirt\", \"color\": \"blue\", \"size\": \"M\", \"price\": 2.99, \"currency\": \"TWD\"}");
+            var order111Json = JsonOrder111WithProduct("{\"code\": \"Shirt\",\"color\": \"blue\",\"size\": \"M\",\"price\": \"2.99\",\"currency\": \"TWD\"}");
             Assert.AreEqual("{\"orders\": [" + order111Json + "]}", new OrdersWriter(_orders).GetContents());
         }
 
@@ -43,7 +45,7 @@ namespace RefactoringKata.UnitTests
         {
             _order111.AddProduct(new Product("Pot", 2, -1, 16.50, "SGD"));
 
-            var order111Json = JsonOrder111WithProduct("{\"code\": \"Pot\", \"color\": \"red\", \"price\": 16.5, \"currency\": \"SGD\"}");
+            var order111Json = JsonOrder111WithProduct("{\"code\": \"Pot\",\"color\": \"red\",\"price\": \"16.5\",\"currency\": \"SGD\"}");
             Assert.AreEqual("{\"orders\": [" + order111Json + "]}", new OrdersWriter(_orders).GetContents());
         }
 
@@ -54,7 +56,25 @@ namespace RefactoringKata.UnitTests
 
             var order111Json = JsonOrder111WithProduct("");
             var order222Json = "{\"id\": 222, \"products\": []}";
-            Assert.AreEqual("{\"orders\": [" + order111Json + ", " + order222Json + "]}", new OrdersWriter(_orders).GetContents());
+            Assert.AreEqual("{\"orders\": [" + order111Json + "," + order222Json + "]}", new OrdersWriter(_orders).GetContents());
+        }
+
+        [Test]
+        public void DictionaryToJson_NoNested_Sucess()
+        {
+            var dictionary = new Dictionary<string, string>
+            {
+                {"code", "123"},
+                {"color",  "red"},
+                {"size", "XL"},
+                {"price", "100"},
+                {"currency", "JPY"}
+
+            };
+
+            var ordersWriter = new OrdersWriter(new Orders());
+            var json = ordersWriter.DictionaryToJson(dictionary);
+            Assert.AreEqual("{\"code\": \"123\",\"color\": \"red\",\"size\": \"XL\",\"price\": \"100\",\"currency\": \"JPY\"}", json);
         }
 
         private string JsonOrder111WithProduct(string productJson)

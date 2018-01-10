@@ -1,4 +1,7 @@
-﻿using System.Text;
+﻿using System.Collections.Generic;
+using System.Globalization;
+using System.Linq;
+using System.Text;
 
 namespace RefactoringKata
 {
@@ -11,12 +14,20 @@ namespace RefactoringKata
             _orders = orders;
         }
 
+        public string DictionaryToJson(Dictionary<string, string> dictionary)
+        {
+            var entries = dictionary.Select(d => $"\"{d.Key}\": \"{string.Join(",", d.Value)}\"");
+            return "{" + string.Join(",", entries) + "}";
+        }
+
         public string GetContents()
         {
             var sb = new StringBuilder("{\"orders\": [");
 
             for (var i = 0; i < _orders.GetOrdersCount(); i++)
             {
+                if (i != 0)
+                    sb.Append(",");
                 var order = _orders.GetOrder(i);
                 sb.Append("{");
                 sb.Append("\"id\": ");
@@ -24,44 +35,27 @@ namespace RefactoringKata
                 sb.Append(", ");
                 sb.Append("\"products\": [");
 
+                var dic = new Dictionary<string, string>();
                 for (var j = 0; j < order.GetProductsCount(); j++)
                 {
-                    var product = order.GetProduct(j);
-                    sb.Append("{");
-                    sb.Append("\"code\": \"");
-                    sb.Append(product.Code);
-                    sb.Append("\", ");
-                    sb.Append("\"color\": \"");
-                    sb.Append(product.GetColorInString());
-                    sb.Append("\", ");
-
-                    if (product.Size != Product.SizeNotApplicable)
+                    if (j != 0)
                     {
-                        sb.Append("\"size\": \"");
-                        sb.Append(product.GetSizeInString());
-                        sb.Append("\", ");
+                        sb.Append(",");
                     }
 
-                    sb.Append("\"price\": ");
-                    sb.Append(product.Price);
-                    sb.Append(", ");
-                    sb.Append("\"currency\": \"");
-                    sb.Append(product.Currency);
-                    sb.Append("\"}, ");
+                    var product = order.GetProduct(j);
+                    dic.Add("code", product.Code);
+                    dic.Add("color", product.GetColorInString());
+                    if (product.Size != Product.SizeNotApplicable)
+                    {
+                        dic.Add("size", product.GetSizeInString());
+                    }
+                    dic.Add("price", product.Price.ToString(CultureInfo.InvariantCulture));
+                    dic.Add("currency", product.Currency);
+                    sb.Append(DictionaryToJson(dic));
                 }
 
-                if (order.GetProductsCount() > 0)
-                {
-                    sb.Remove(sb.Length - 2, 2);
-                }
-
-                sb.Append("]");
-                sb.Append("}, ");
-            }
-
-            if (_orders.GetOrdersCount() > 0)
-            {
-                sb.Remove(sb.Length - 2, 2);
+                sb.Append("]}");
             }
 
             return sb.Append("]}").ToString();
